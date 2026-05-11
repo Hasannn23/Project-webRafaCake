@@ -14,6 +14,11 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                'rafa-pink': '#FDF2F8',      // Pink sangat muda (untuk background/section)
+                'rafa-dark-pink': '#DB2777', // Pink tegas (untuk tombol/heading)
+                'rafa-accent': '#F472B6',    // Pink sedang (untuk variasi)
+            },
         },
     },
 
