@@ -15,8 +15,8 @@
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <!-- Menu Katalog/Produk -->
-                    <x-nav-link :href="url('/#katalog')" :active="request()->is('/#katalog')">
-                        {{ __('Katalog') }}
+                    <x-nav-link :href="url('/#produk')" :active="request()->is('/#produk')">
+                        {{ __('Produk') }}
                     </x-nav-link>
 
                     <!-- Menu Tentang Kami -->
@@ -31,7 +31,7 @@
 
                     @auth
                         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                            {{ __('Dashboard Saya') }}
+                            {{ __('Riwayat Pesanan') }}
                         </x-nav-link>
                     @endauth
                 </div>
@@ -86,8 +86,8 @@
 
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="url('/#katalog')">
-                {{ __('Katalog') }}
+            <x-responsive-nav-link :href="url('/#produk')">
+                {{ __('Produk') }}
             </x-responsive-nav-link>
             
             <x-responsive-nav-link :href="url('/#tentang-kami')">
