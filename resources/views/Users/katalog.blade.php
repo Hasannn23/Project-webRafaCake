@@ -27,8 +27,9 @@
                 <div class="max-w-7xl mx-auto px-6">
                     
                     <!-- Filter Kategori -->
-                    <div class="mb-10 overflow-x-auto pb-4 hide-scrollbar">
-                        <div class="flex gap-4 min-w-max">
+                    <div class="mb-10" x-data="{ showAllCategories: false }">
+                        <div :class="showAllCategories ? 'max-h-[1000px]' : 'max-h-[44px] sm:max-h-[48px]'" 
+                             class="flex flex-wrap gap-3 overflow-hidden transition-[max-height] duration-500 ease-in-out">
                             @php
                                 $categories = [
                                     'Semua',
@@ -51,10 +52,18 @@
                                 <button type="button" 
                                         @click="selectedCategory = '{{ $category }}'"
                                         :class="selectedCategory === '{{ $category }}' ? 'bg-rafa-dark-pink text-white shadow-md' : 'bg-white text-gray-700 hover:bg-pink-100 shadow-sm'"
-                                        class="px-6 py-2 rounded-full font-bold transition whitespace-nowrap cursor-pointer">
+                                        class="px-4 py-2 rounded-full font-bold transition text-sm sm:text-base cursor-pointer text-center border border-pink-100 whitespace-nowrap">
                                     {{ $category }}
                                 </button>
                             @endforeach
+                        </div>
+                        <div class="mt-4 flex justify-end">
+                            <button type="button" @click="showAllCategories = !showAllCategories" 
+                                    class="px-5 py-2 bg-pink-100 text-rafa-dark-pink font-bold rounded-full hover:bg-pink-200 transition border border-pink-200 shadow-sm flex items-center gap-2 cursor-pointer">
+                                <svg class="w-5 h-5 transition-transform duration-300" :class="showAllCategories ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
                         </div>
                     </div>
 
@@ -80,10 +89,10 @@
                                 <div class="mt-6">
                                     @auth
                                         @if(auth()->user()->role == 'member' || auth()->user()->role == 'user' || auth()->user()->usertype == 'user' || !isset(auth()->user()->role))
-                                            <button type="button" @click="addToCart({{ $product->id }}, '{{ addslashes($product->nama_kue) }}', {{ $product->harga }}, '{{ asset('storage/' . $product->gambar) }}')" 
+                                            <button type="button" @click="openProductModal({{ $product->id }}, '{{ addslashes($product->nama_kue) }}', {{ $product->harga }}, '{{ asset('storage/' . $product->gambar) }}', '{{ addslashes($product->deskripsi) }}', '{{ addslashes($product->kategori) }}')" 
                                                     class="w-full bg-rafa-dark-pink hover:bg-pink-700 text-white font-bold py-3 rounded-xl transition flex justify-center items-center gap-2 cursor-pointer">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                                                Tambah ke Keranjang
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                                Detail Produk
                                             </button>
                                         @else
                                             <a href="/admin/products" class="block text-center w-full bg-gray-800 text-white py-3 rounded-xl">Kelola Produk</a>
@@ -91,9 +100,10 @@
                                     @endauth
 
                                     @guest
-                                        <a href="{{ route('login') }}" 
-                                        class="block text-center w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl transition">
-                                            Login untuk Pesan
+                                        <a href="https://wa.me/6285624378677?text=Halo%20Admin%20Rafa%20Cake,%20saya%20ingin%20pesan%20kue%20{{ urlencode($product->nama_kue) }}" target="_blank"
+                                        class="block text-center w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl transition flex justify-center items-center gap-2">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                                            Pesan via WhatsApp
                                         </a>
                                     @endguest
                                 </div>
@@ -105,6 +115,8 @@
             </section>
         </div>
 
+        @auth
+            @if(auth()->user()->role == 'member' || auth()->user()->role == 'user' || auth()->user()->usertype == 'user' || !isset(auth()->user()->role))
         <!-- Floating Cart Button -->
         <button @click="isCartOpen = true" class="fixed bottom-8 right-8 bg-rafa-dark-pink text-white p-4 rounded-full shadow-2xl hover:bg-pink-700 transition z-50 flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 duration-200">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
@@ -230,9 +242,8 @@
                                         <button type="submit" 
                                                 :disabled="selectedItems.length === 0"
                                                 :class="{'opacity-50 cursor-not-allowed': selectedItems.length === 0}"
-                                                class="flex w-full items-center justify-center rounded-xl border border-transparent bg-green-500 px-6 py-4 text-base font-bold text-white shadow-md hover:bg-green-600 hover:shadow-lg transition cursor-pointer gap-2">
-                                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-                                            Pesan Sekarang (WhatsApp)
+                                                class="flex w-full items-center justify-center rounded-xl border border-transparent bg-pink-500 px-6 py-4 text-base font-bold text-white shadow-md hover:bg-pink-600 hover:shadow-lg transition cursor-pointer gap-2">
+                                            Pesan Sekarang
                                         </button>
                                     </div>
                                 </form>
@@ -242,6 +253,70 @@
                 </div>
             </div>
         </div>
+            @endif
+        @endauth
+        <!-- Product Detail Modal -->
+        <div x-show="isProductModalOpen" 
+             style="display: none;" 
+             class="fixed inset-0 z-[110] overflow-y-auto" 
+             aria-labelledby="modal-title" 
+             role="dialog" 
+             aria-modal="true">
+            <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div x-show="isProductModalOpen" 
+                     x-transition:enter="ease-out duration-300"
+                     x-transition:enter-start="opacity-0"
+                     x-transition:enter-end="opacity-100"
+                     x-transition:leave="ease-in duration-200"
+                     x-transition:leave-start="opacity-100"
+                     x-transition:leave-end="opacity-0"
+                     class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity backdrop-blur-sm" 
+                     @click="closeProductModal()"></div>
+
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                <div x-show="isProductModalOpen" 
+                     x-transition:enter="ease-out duration-300"
+                     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                     x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                     x-transition:leave="ease-in duration-200"
+                     x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                     x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                     class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl w-full">
+                    
+                    <button type="button" @click="closeProductModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full p-2 transition cursor-pointer z-10">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+
+                    <div class="sm:flex">
+                        <div class="w-full sm:w-1/2">
+                            <img :src="selectedProduct?.image" :alt="selectedProduct?.name" class="w-full h-64 sm:h-full object-cover">
+                        </div>
+                        <div class="w-full sm:w-1/2 p-6 flex flex-col justify-between">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-rafa-dark-pink bg-rafa-pink-100 px-3 py-1 rounded-full inline-block mb-3" x-text="selectedProduct?.category"></span>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2" x-text="selectedProduct?.name"></h3>
+                                <p class="text-2xl font-bold text-rafa-dark-pink mb-4" x-text="selectedProduct?.price ? 'Rp ' + selectedProduct.price.toLocaleString('id-ID') : ''"></p>
+                                <div class="text-gray-600 text-sm mb-6 max-h-48 overflow-y-auto pr-2">
+                                    <p x-text="selectedProduct?.description"></p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-auto">
+                                <button type="button" @click="addToCart(selectedProduct.id, selectedProduct.name, selectedProduct.price, selectedProduct.image); closeProductModal()" 
+                                        class="w-full bg-rafa-dark-pink hover:bg-pink-700 text-white font-bold py-3 rounded-xl transition flex justify-center items-center gap-2 cursor-pointer">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                    Tambah ke Keranjang
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- Memanggil bagian Tentang Kami -->
@@ -253,6 +328,19 @@
             Alpine.data('shoppingCart', () => ({
                 isCartOpen: false,
                 cart: JSON.parse(localStorage.getItem('rafa_cart')) || [],
+                
+                isProductModalOpen: false,
+                selectedProduct: null,
+                
+                openProductModal(id, name, price, image, description, category) {
+                    this.selectedProduct = { id, name, price, image, description, category };
+                    this.isProductModalOpen = true;
+                },
+                
+                closeProductModal() {
+                    this.isProductModalOpen = false;
+                    this.selectedProduct = null;
+                },
                 
                 get cartItemCount() {
                     return this.cart.reduce((total, item) => total + item.quantity, 0);

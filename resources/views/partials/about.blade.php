@@ -21,7 +21,7 @@
                     Lebih dari Sekadar Toko, <span class="text-pink-600">Rumah Produksi Hati</span>
                 </h2>
                 <p class="text-lg text-gray-600 leading-relaxed mb-6">
-                    Rafa Cake lahir dari semangat untuk menghadirkan kehangatan di setiap meja makan. Sebagai **Rumah Produksi** sekaligus toko kue, kami memastikan setiap adonan dibuat dengan bahan pilihan terbaik dan teknik yang terjaga kualitasnya.
+                    Rafa Cake lahir dari semangat untuk menghadirkan kehangatan di setiap meja makan. Sebagai Rumah Produksi sekaligus toko kue, kami memastikan setiap adonan dibuat dengan bahan pilihan terbaik dan teknik yang terjaga kualitasnya.
                 </p>
                 <div class="space-y-4">
                     <div class="flex items-start">

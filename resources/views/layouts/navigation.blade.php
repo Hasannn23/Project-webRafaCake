@@ -30,9 +30,17 @@
                     </x-nav-link>
 
                     @auth
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                            {{ __('Riwayat Pesanan') }}
-                        </x-nav-link>
+                        @if(Auth::user()->role !== 'admin')
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                {{ __('Riwayat Pesanan') }}
+                            </x-nav-link>
+                        @endif
+
+                        @if(Auth::user()->role === 'admin')
+                            <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
+                                {{ __('Dashboard Admin') }}
+                            </x-nav-link>
+                        @endif
                     @endauth
                 </div>
             </div>
@@ -99,9 +107,17 @@
             </x-responsive-nav-link>
 
             @auth
-                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                    {{ __('Dashboard Saya') }}
-                </x-responsive-nav-link>
+                @if(Auth::user()->role !== 'admin')
+                    <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('Dashboard Saya') }}
+                    </x-responsive-nav-link>
+                @endif
+
+                @if(Auth::user()->role === 'admin')
+                    <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
+                        {{ __('Dashboard Admin') }}
+                    </x-responsive-nav-link>
+                @endif
             @endauth
         </div>
 

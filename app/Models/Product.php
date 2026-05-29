@@ -18,6 +18,7 @@ class Product extends Model
         'gambar',
         'kategori',
         'is_promo',
-        'diskon'
+        'diskon',
+        'is_available'
     ];
 }

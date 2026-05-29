@@ -21,7 +21,8 @@ class Order extends Model
         'detail_tambahan', // Kolom JSON
         'status',
         'foto_referensi',
-        'total_harga'
+        'total_harga',
+        'alasan_penolakan'
     ];
 
     // 2. Masukkan Casts di sini
@@ -37,5 +38,21 @@ class Order extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Relasi: Satu Order punya satu Review
+     */
+    public function review()
+    {
+        return $this->hasOne(Review::class);
+    }
+
+    /**
+     * Relasi: Satu Order punya banyak OrderItem
+     */
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
     }
 }

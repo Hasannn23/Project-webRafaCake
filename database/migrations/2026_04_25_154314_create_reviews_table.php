@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('product_id')->constrained();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->integer('rating'); // 1-5
             $table->text('komentar');
-            $table->boolean('is_tampilkan')->default(false); // Admin yang tentukan tampil/tidak
             $table->timestamps();
-        });
 
+            // 1 review per order per user
+            $table->unique(['user_id', 'order_id']);
+        });
     }
 
     /**
