@@ -7,7 +7,7 @@
             <div class="relative">
                 <div class="rounded-2xl overflow-hidden shadow-2xl transform -rotate-2 hover:rotate-0 transition duration-500">
                     <!-- Ganti src dengan foto asli rumah produksi Rafa Cake nanti -->
-                    <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                    <img src="{{ asset('images/TK.jpg') }}" 
                          alt="Dapur Rafa Cake" 
                          class="w-full h-[400px] object-cover">
                 </div>

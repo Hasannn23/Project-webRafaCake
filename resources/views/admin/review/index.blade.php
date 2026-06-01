@@ -4,7 +4,7 @@
 <div class="space-y-6" x-data="{ openDetail: false, detailData: null }">
     <div class="flex items-center justify-between">
         <div>
-            <h2 class="text-2xl font-bold text-gray-800">⭐ Kelola Review</h2>
+            <h2 class="text-2xl font-bold text-gray-800"> Kelola Review</h2>
             <p class="text-sm text-gray-500 mt-1">Semua review dari member yang telah menyelesaikan pesanan</p>
         </div>
         <span class="bg-emerald-100 text-emerald-700 text-sm font-semibold px-3 py-1 rounded-full">
@@ -15,7 +15,7 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         @if($reviews->isEmpty())
             <div class="text-center py-12">
-                <span class="text-4xl">💬</span>
+                
                 <p class="text-gray-500 mt-3">Belum ada review dari member.</p>
             </div>
         @else
@@ -48,7 +48,7 @@
                             <td class="p-4">
                                 <div class="flex items-center gap-0.5">
                                     @for($s = 1; $s <= 5; $s++)
-                                        <span class="text-sm">{{ $s <= $review->rating ? '⭐' : '☆' }}</span>
+                                        <span class="text-sm">{{ $s <= $review->rating ? '' : '' }}</span>
                                     @endfor
                                 </div>
                             </td>
@@ -59,13 +59,13 @@
                             <td class="p-4">
                                 <div class="flex gap-2">
                                     <button type="button" @click='openDetail = true; detailData = @json($review->order)' class="text-xs bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1.5 px-3 rounded-lg transition cursor-pointer">
-                                        👁️ Detail
+                                         Detail
                                     </button>
                                     <form action="{{ route('admin.review.destroy', $review->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus review ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="text-xs bg-red-500 hover:bg-red-600 text-white font-semibold py-1.5 px-3 rounded-lg transition cursor-pointer">
-                                            🗑️ Hapus
+                                             Hapus
                                         </button>
                                     </form>
                                 </div>

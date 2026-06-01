@@ -5,7 +5,7 @@
             <div class="relative text-center mb-16 py-24 rounded-3xl overflow-hidden shadow-lg border border-pink-100">
                 
                 <!-- 1. Foto Bangunan (Background) -->
-                <img src="{{ asset('images/BG1.png') }}" 
+                <img src="{{ asset('images/BG3.jpeg') }}" 
                     alt="Bangunan Rafa Cake" 
                     class="absolute inset-0 w-full h-full object-cover">
 
@@ -72,8 +72,16 @@
                         @foreach($products as $product)
                         <div x-show="selectedCategory === 'Semua' || selectedCategory === '{{ addslashes($product->kategori) }}'"
                              x-transition
-                             class="bg-white rounded-2xl shadow-lg overflow-hidden border border-pink-50 hover:shadow-2xl transition duration-300 flex flex-col" style="display: none;">
-                            <img src="{{ asset('storage/' . $product->gambar) }}" class="w-full h-56 object-cover" alt="{{ $product->nama_kue }}">
+                             class="bg-white rounded-2xl shadow-lg overflow-hidden border border-pink-50 transition duration-300 flex flex-col {{ $product->is_available ? 'hover:shadow-2xl' : 'opacity-75 grayscale' }}" style="display: none;">
+                            
+                            <div class="relative">
+                                <img src="{{ asset('storage/' . $product->gambar) }}" class="w-full h-56 object-cover" alt="{{ $product->nama_kue }}">
+                                @if(!$product->is_available)
+                                    <div class="absolute inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+                                        <span class="text-white font-extrabold text-3xl tracking-widest uppercase transform -rotate-12 border-4 border-white px-4 py-2 bg-red-500 bg-opacity-80 rounded shadow-lg">HABIS</span>
+                                    </div>
+                                @endif
+                            </div>
                             
                             <div class="p-6 flex flex-col flex-grow">
                                 <span class="text-xs font-bold uppercase tracking-wider text-rafa-dark-pink bg-rafa-pink-100 px-3 py-1 rounded-full w-max">
@@ -89,22 +97,32 @@
                                 <div class="mt-6">
                                     @auth
                                         @if(auth()->user()->role == 'member' || auth()->user()->role == 'user' || auth()->user()->usertype == 'user' || !isset(auth()->user()->role))
-                                            <button type="button" @click="openProductModal({{ $product->id }}, '{{ addslashes($product->nama_kue) }}', {{ $product->harga }}, '{{ asset('storage/' . $product->gambar) }}', '{{ addslashes($product->deskripsi) }}', '{{ addslashes($product->kategori) }}')" 
-                                                    class="w-full bg-rafa-dark-pink hover:bg-pink-700 text-white font-bold py-3 rounded-xl transition flex justify-center items-center gap-2 cursor-pointer">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                                Detail Produk
-                                            </button>
+                                            @if($product->is_available)
+                                                <button type="button" @click="openProductModal({{ $product->id }}, '{{ addslashes($product->nama_kue) }}', {{ $product->harga }}, '{{ asset('storage/' . $product->gambar) }}', '{{ addslashes($product->deskripsi) }}', '{{ addslashes($product->kategori) }}')" 
+                                                        class="w-full bg-rafa-dark-pink hover:bg-pink-700 text-white font-bold py-3 rounded-xl transition flex justify-center items-center gap-2 cursor-pointer">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                                    Detail Produk
+                                                </button>
+                                            @else
+                                                <button type="button" disabled class="w-full bg-gray-400 text-white font-bold py-3 rounded-xl cursor-not-allowed flex justify-center items-center gap-2">
+                                                    Detail Produk
+                                                </button>
+                                            @endif
                                         @else
-                                            <a href="/admin/products" class="block text-center w-full bg-gray-800 text-white py-3 rounded-xl">Kelola Produk</a>
+                                            <a href="{{ route('admin.katalog') }}" class="block text-center w-full bg-gray-800 text-white py-3 rounded-xl">Kelola Produk</a>
                                         @endif
                                     @endauth
 
                                     @guest
-                                        <a href="https://wa.me/6285624378677?text=Halo%20Admin%20Rafa%20Cake,%20saya%20ingin%20pesan%20kue%20{{ urlencode($product->nama_kue) }}" target="_blank"
-                                        class="block text-center w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl transition flex justify-center items-center gap-2">
-                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-                                            Pesan via WhatsApp
-                                        </a>
+                                        @if($product->is_available)
+                                            <a href="https://wa.me/6285624378677?text=Halo%20Admin%20Rafa%20Cake,%20saya%20ingin%20pesan%20kue%20{{ urlencode($product->nama_kue) }}" target="_blank"
+                                            class="block text-center w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl transition flex justify-center items-center gap-2">
+                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                                                Pesan via WhatsApp
+                                            </a>
+                                        @else
+                                            <button type="button" disabled class="block text-center w-full bg-gray-400 text-white font-bold py-3 rounded-xl cursor-not-allowed">Habis</button>
+                                        @endif
                                     @endguest
                                 </div>
                             </div>

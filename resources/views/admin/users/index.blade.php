@@ -9,11 +9,11 @@
     <!-- Header -->
     <div class="flex items-center justify-between">
         <div>
-            <h2 class="text-2xl font-bold text-gray-800">👥 Kelola User</h2>
+            <h2 class="text-2xl font-bold text-gray-800"> Kelola User</h2>
             <p class="text-sm text-gray-500 mt-1">Kelola semua member yang terdaftar</p>
         </div>
         <button @click="showCreateModal = true" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition flex items-center gap-2 text-sm cursor-pointer">
-            <span>➕</span> Tambah User
+             Tambah User
         </button>
     </div>
 
@@ -21,7 +21,7 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         @if($users->isEmpty())
             <div class="text-center py-12">
-                <span class="text-4xl">👤</span>
+                
                 <p class="text-gray-500 mt-3">Belum ada member terdaftar.</p>
             </div>
         @else
@@ -54,13 +54,13 @@
                                 <div class="flex items-center gap-2">
                                     <button @click="showEditModal = true; editId = {{ $user->id }}; editName = '{{ addslashes($user->name) }}'; editEmail = '{{ addslashes($user->email) }}'" 
                                         class="text-xs bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1.5 px-3 rounded-lg transition cursor-pointer">
-                                        ✏️ Edit
+                                         Edit
                                     </button>
                                     <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus user {{ $user->name }}?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="text-xs bg-red-500 hover:bg-red-600 text-white font-semibold py-1.5 px-3 rounded-lg transition cursor-pointer">
-                                            🗑️ Hapus
+                                             Hapus
                                         </button>
                                     </form>
                                 </div>
@@ -81,7 +81,7 @@
             <div x-show="showCreateModal" x-transition.opacity class="fixed inset-0 bg-gray-500 bg-opacity-75" @click="showCreateModal = false"></div>
             <div x-show="showCreateModal" x-transition class="relative bg-white rounded-xl shadow-xl max-w-md w-full z-10">
                 <div class="px-6 pt-6 pb-4">
-                    <h3 class="text-lg font-bold text-gray-900 mb-4">➕ Tambah User Baru</h3>
+                    <h3 class="text-lg font-bold text-gray-900 mb-4"> Tambah User Baru</h3>
                     <form action="{{ route('admin.users.store') }}" method="POST" class="space-y-4">
                         @csrf
                         <div>
@@ -98,7 +98,7 @@
                         </div>
                         <div class="flex justify-end gap-3 pt-3 border-t">
                             <button type="button" @click="showCreateModal = false" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition cursor-pointer">Batal</button>
-                            <button type="submit" class="px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition cursor-pointer">💾 Simpan</button>
+                            <button type="submit" class="px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition cursor-pointer"> Simpan</button>
                         </div>
                     </form>
                 </div>
@@ -114,7 +114,7 @@
             <div x-show="showEditModal" x-transition.opacity class="fixed inset-0 bg-gray-500 bg-opacity-75" @click="showEditModal = false"></div>
             <div x-show="showEditModal" x-transition class="relative bg-white rounded-xl shadow-xl max-w-md w-full z-10">
                 <div class="px-6 pt-6 pb-4">
-                    <h3 class="text-lg font-bold text-gray-900 mb-4">✏️ Edit User</h3>
+                    <h3 class="text-lg font-bold text-gray-900 mb-4"> Edit User</h3>
                     <form :action="'/admin/users/' + editId" method="POST" class="space-y-4">
                         @csrf
                         @method('PUT')
@@ -132,7 +132,7 @@
                         </div>
                         <div class="flex justify-end gap-3 pt-3 border-t">
                             <button type="button" @click="showEditModal = false" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition cursor-pointer">Batal</button>
-                            <button type="submit" class="px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition cursor-pointer">💾 Simpan</button>
+                            <button type="submit" class="px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition cursor-pointer"> Simpan</button>
                         </div>
                     </form>
                 </div>

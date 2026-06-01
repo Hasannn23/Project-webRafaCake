@@ -17,7 +17,7 @@
                     </li>
                     <li class="flex items-center">
                         <span class="mr-3 text-pink-500">✉️</span> 
-                        halo@rafacake.com
+                        evanurfarihah22@gmail.com
                     </li>
                 </ul>
             </div>

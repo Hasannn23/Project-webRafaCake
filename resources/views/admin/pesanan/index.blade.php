@@ -38,9 +38,9 @@
             if (data.success) {
                 // Build WhatsApp message
                 const order = this.tolakOrderData;
-                let waText = `Halo ${order.nama_pemesan}, terima kasih sudah menghubungi Rafa Cake! 🙏\n\n`;
+                let waText = `Halo ${order.nama_pemesan}, terima kasih sudah menghubungi Rafa Cake!\n\n`;
                 waText += `Mohon maaf, pesanan kamu dengan detail berikut:\n\n`;
-                waText += `📦 DETAIL PESANAN\n`;
+                waText += `DETAIL PESANAN\n`;
                 waText += `Nomor Invoice: #INV-${String(order.id).padStart(5, '0')}\n\n`;
                 
                 if (order.detail_tambahan && Array.isArray(order.detail_tambahan) && order.detail_tambahan[0]?.name) {
@@ -50,11 +50,11 @@
                     });
                 }
                 
-                waText += `💰 Total: Rp ${order.total_harga ? order.total_harga.toLocaleString('id-ID') : '0'}\n\n`;
+                waText += `Total: Rp ${order.total_harga ? order.total_harga.toLocaleString('id-ID') : '0'}\n\n`;
                 waText += `Sayangnya kami tidak dapat memproses pesanan ini.\n\n`;
-                waText += `❌ ALASAN PENOLAKAN:\n`;
+                waText += `ALASAN PENOLAKAN:\n`;
                 waText += `${this.alasanPenolakan}\n\n`;
-                waText += `Kami mohon maaf atas ketidaknyamanannya. Silakan hubungi kami jika ada pertanyaan lebih lanjut. Terima kasih! 🙏`;
+                waText += `Kami mohon maaf atas ketidaknyamanannya. Silakan hubungi kami jika ada pertanyaan lebih lanjut. Terima kasih!`;
                 
                 // Format WA number
                 let waNumber = order.nomor_wa.replace(/[^0-9]/g, '');
@@ -81,7 +81,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between">
         <div>
-            <h2 class="text-2xl font-bold text-gray-800">🛒 Kelola Pemesanan</h2>
+            <h2 class="text-2xl font-bold text-gray-800"> Kelola Pemesanan</h2>
             <p class="text-sm text-gray-500 mt-1">Pesanan masuk yang menunggu persetujuan</p>
         </div>
         <span class="bg-amber-100 text-amber-700 text-sm font-semibold px-3 py-1 rounded-full">
@@ -93,7 +93,7 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         @if($orders->isEmpty())
             <div class="text-center py-12">
-                <span class="text-4xl">📭</span>
+                
                 <p class="text-gray-500 mt-3">Tidak ada pesanan yang menunggu persetujuan.</p>
             </div>
         @else
@@ -145,9 +145,9 @@
                             <td class="p-4">
                                 <div class="flex items-center gap-2 flex-wrap">
                                     @php
-                                        $waText = "Halo {$order->nama_pemesan}, terima kasih sudah berbelanja di Rafa Cake! 🙌\n\n";
+                                        $waText = "Halo {$order->nama_pemesan}, terima kasih sudah berbelanja di Rafa Cake! \n\n";
                                         $waText .= "Berikut adalah rincian pesanan kamu:\n\n";
-                                        $waText .= "📦 DETAIL PEMESANAN\n";
+                                        $waText .= " DETAIL PEMESANAN\n";
                                         $waText .= "Nomor Invoice: #INV-" . str_pad($order->id, 5, '0', STR_PAD_LEFT) . "\n\n";
                                         
                                         if ($order->detail_tambahan && isset($order->detail_tambahan[0]['name'])) {
@@ -158,15 +158,15 @@
                                         }
                                         
                                         $waText .= "Ongkos Kirim = Rp 0\n\n";
-                                        $waText .= "💰 TOTAL HARGA = Rp " . number_format($order->total_harga, 0, ',', '.') . "\n\n";
+                                        $waText .= " TOTAL HARGA = Rp " . number_format($order->total_harga, 0, ',', '.') . "\n\n";
                                         
-                                        $waText .= "💳 IDENTITAS PEMBAYARAN\n";
+                                        $waText .= " IDENTITAS PEMBAYARAN\n";
                                         $waText .= "Silakan lakukan transfer ke salah satu rekening berikut:\n\n";
                                         $waText .= "BCA: 1234567890 a.n Admin Rafa Cake\n\n";
                                         $waText .= "Mandiri: 0987654321 a.n Admin Rafa Cake\n\n";
                                         $waText .= "Gopay/OVO: 081234567890 a.n Admin Rafa Cake\n\n";
                                         
-                                        $waText .= "📝 PANDUAN PEMBAYARAN\n\n";
+                                        $waText .= " PANDUAN PEMBAYARAN\n\n";
                                         $waText .= "Pastikan nominal transfer sesuai persis dengan Total Harga di atas.\n\n";
                                         $waText .= "Jika sudah berhasil transfer, mohon balas pesan ini dengan melampirkan Bukti Transfer (foto/screenshot).\n\n";
                                         $waText .= "Pesanan kamu akan langsung kami proses setelah pembayaran terverifikasi.\n\n";
@@ -182,7 +182,7 @@
 
                                     {{-- Detail Button --}}
                                     <button @click='openDetail = true; detailData = @json($order)' class="text-xs bg-gray-500 hover:bg-gray-600 text-white font-semibold py-1.5 px-3 rounded-lg transition cursor-pointer">
-                                        🔍 Detail
+                                         Detail
                                     </button>
                                     {{-- Terima (Invoice WA) --}}
                                     @if($order->status == 'pending')
@@ -191,13 +191,13 @@
                                             @method('PATCH')
                                             <input type="hidden" name="status" value="disetujui">
                                             <button type="submit" onclick="window.open('{{ $waUrl }}', '_blank')" class="text-xs bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1.5 px-3 rounded-lg transition cursor-pointer">
-                                                💬 Terima
+                                                 Terima
                                             </button>
                                         </form>
                                     @elseif($order->status == 'disetujui')
                                         <form action="{{ $waUrl }}" method="GET" target="_blank" class="inline-block">
                                             <button type="submit" class="text-xs bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1.5 px-3 rounded-lg transition cursor-pointer">
-                                                💬 Hubungi WA
+                                                 Hubungi WA
                                             </button>
                                         </form>
                                     @endif
@@ -207,12 +207,12 @@
                                         @method('PATCH')
                                         <input type="hidden" name="status" value="selesai">
                                         <button type="submit" class="text-xs bg-green-500 hover:bg-green-600 text-white font-semibold py-1.5 px-3 rounded-lg transition cursor-pointer" onclick="return confirm('Pesanan selesai dan dipindah ke history #{{ $order->id }}?')">
-                                            ✅ Selesai
+                                             Selesai
                                         </button>
                                     </form>
                                     {{-- Tolak (membuka modal) --}}
                                     <button @click="openTolak = true; tolakOrderId = {{ $order->id }}; tolakOrderData = @js($order); alasanPenolakan = '';" class="text-xs bg-red-500 hover:bg-red-600 text-white font-semibold py-1.5 px-3 rounded-lg transition cursor-pointer">
-                                        ❌ Tolak
+                                         Tolak
                                     </button>
                                 </div>
                             </td>
@@ -230,12 +230,12 @@
             <div x-show="openDetail" x-transition.opacity class="fixed inset-0 bg-gray-500 bg-opacity-75" @click="openDetail = false"></div>
             <div x-show="openDetail" x-transition class="relative bg-white rounded-xl shadow-xl max-w-lg w-full z-10">
                 <div class="px-6 pt-6 pb-4">
-                    <h3 class="text-lg font-bold text-gray-900 border-b pb-3 mb-4">🔍 Detail Pesanan</h3>
+                    <h3 class="text-lg font-bold text-gray-900 border-b pb-3 mb-4"> Detail Pesanan</h3>
                     <div class="text-sm text-gray-600 space-y-3">
                         <p><strong>ID Pesanan:</strong> #<span x-text="detailData?.id"></span></p>
                         <p><strong>Nama:</strong> <span x-text="detailData?.nama_pemesan"></span></p>
                         <p><strong>No. WA:</strong> <span x-text="detailData?.nomor_wa"></span></p>
-                        <p><strong>Waktu Ambil/Kirim:</strong> <span x-text="detailData ? new Date(detailData.waktu_pengambilan).toLocaleString('id-ID') : ''"></span></p>
+                        <p><strong>Waktu Ambil/Kirim:</strong> <span x-text="detailData?.waktu_pengambilan ? new Date(detailData.waktu_pengambilan).toLocaleString('id-ID') : '-'"></span></p>
                         
                         <div class="border-t pt-3 mt-3">
                             <p class="font-bold mb-2">Produk yang dipesan:</p>
@@ -243,7 +243,7 @@
                                 <template x-if="detailData?.detail_tambahan && Array.isArray(detailData.detail_tambahan) && detailData.detail_tambahan[0]?.name">
                                     <template x-for="item in detailData.detail_tambahan" :key="item.name">
                                         <li>
-                                            <span x-text="item.name"></span> (<span x-text="item.quantity"></span>x) 
+                                            <span x-text="item.name"></span> (x<span x-text="item.quantity"></span>) 
                                             — <span class="font-medium" x-text="'Rp ' + (item.price * item.quantity).toLocaleString('id-ID')"></span>
                                         </li>
                                     </template>
@@ -253,7 +253,7 @@
 
                         <div class="border-t pt-3 mt-3 flex justify-between font-bold text-lg text-pink-600">
                             <span>Total:</span>
-                            <span x-text="detailData?.total_harga ? 'Rp ' + detailData.total_harga.toLocaleString('id-ID') : '-'"></span>
+                            <span x-text="'Rp ' + (detailData?.total_harga ? detailData.total_harga.toLocaleString('id-ID') : '0')"></span>
                         </div>
                     </div>
                 </div>
@@ -270,7 +270,7 @@
             <div x-show="openTolak" x-transition.opacity class="fixed inset-0 bg-gray-500 bg-opacity-75" @click="openTolak = false"></div>
             <div x-show="openTolak" x-transition class="relative bg-white rounded-xl shadow-xl max-w-lg w-full z-10">
                 <div class="px-6 pt-6 pb-4">
-                    <h3 class="text-lg font-bold text-red-600 border-b pb-3 mb-4">❌ Tolak Pesanan</h3>
+                    <h3 class="text-lg font-bold text-red-600 border-b pb-3 mb-4"> Tolak Pesanan</h3>
                     <div class="text-sm text-gray-600 space-y-4">
                         <div class="bg-red-50 border border-red-200 rounded-lg p-3">
                             <p class="text-red-700 text-sm">
@@ -305,8 +305,8 @@
                         :disabled="isSubmitting"
                         class="px-4 py-2 text-sm font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        <span x-show="!isSubmitting">❌ Tolak & Kirim WA</span>
-                        <span x-show="isSubmitting">⏳ Memproses...</span>
+                        <span x-show="!isSubmitting"> Tolak & Kirim WA</span>
+                        <span x-show="isSubmitting"> Memproses...</span>
                     </button>
                 </div>
             </div>

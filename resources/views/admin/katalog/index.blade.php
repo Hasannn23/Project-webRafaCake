@@ -5,7 +5,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between flex-wrap gap-3">
         <div>
-            <h2 class="text-2xl font-bold text-gray-800">🍩 Kelola Produk</h2>
+            <h2 class="text-2xl font-bold text-gray-800"> Kelola Produk</h2>
             <p class="text-sm text-gray-500 mt-1">Kelola semua produk kue Rafa Cake</p>
         </div>
         <div class="flex items-center gap-3 flex-wrap">
@@ -13,17 +13,17 @@
             <form method="GET" action="{{ route('admin.katalog') }}" class="flex items-center gap-2">
                 <select name="kategori" onchange="this.form.submit()"
                     class="text-sm rounded-lg border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 py-2 px-3 bg-white">
-                    <option value="">🏷️ Semua Kategori</option>
+                    <option value=""> Semua Kategori</option>
                     @foreach($kategoriList as $kat)
                         <option value="{{ $kat }}" {{ request('kategori') == $kat ? 'selected' : '' }}>{{ $kat }}</option>
                     @endforeach
                 </select>
                 @if(request('kategori'))
-                    <a href="{{ route('admin.katalog') }}" class="text-xs text-gray-500 hover:text-red-500 transition font-medium">✕ Reset</a>
+                    <a href="{{ route('admin.katalog') }}" class="text-xs text-gray-500 hover:text-red-500 transition font-medium"> Reset</a>
                 @endif
             </form>
             <a href="{{ route('admin.katalog.create') }}" class="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition flex items-center gap-2 text-sm">
-                <span>➕</span> Tambah Produk
+                 Tambah Produk
             </a>
         </div>
     </div>
@@ -31,7 +31,7 @@
     <!-- Info filter aktif -->
     @if(request('kategori'))
         <div class="bg-blue-50 border border-blue-200 text-blue-700 text-sm px-4 py-2 rounded-lg flex items-center gap-2">
-            🔍 Menampilkan produk kategori: <strong>{{ request('kategori') }}</strong>
+             Menampilkan produk kategori: <strong>{{ request('kategori') }}</strong>
             <span class="text-gray-400">—</span>
             <span>{{ $products->total() }} produk ditemukan</span>
         </div>
@@ -41,7 +41,7 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         @if($products->isEmpty())
             <div class="text-center py-12">
-                <span class="text-4xl">📦</span>
+                
                 <p class="text-gray-500 mt-3">
                     @if(request('kategori'))
                         Tidak ada produk di kategori "{{ request('kategori') }}".
@@ -100,17 +100,17 @@
                                         @csrf
                                         @method('PATCH')
                                         <button type="submit" class="text-xs text-white font-semibold py-1.5 px-3 rounded-lg transition cursor-pointer {{ $product->is_available ? 'bg-amber-500 hover:bg-amber-600' : 'bg-emerald-500 hover:bg-emerald-600' }}">
-                                            {{ $product->is_available ? '⏸️ Nonaktifkan' : '▶️ Aktifkan' }}
+                                            {{ $product->is_available ? 'Nonaktifkan' : 'Aktifkan' }}
                                         </button>
                                     </form>
                                     <a href="{{ route('admin.katalog.edit', $product->id) }}" class="text-xs bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1.5 px-3 rounded-lg transition">
-                                        ✏️ Edit
+                                         Edit
                                     </a>
                                     <form action="{{ route('admin.katalog.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus produk {{ $product->nama_kue }}?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="text-xs bg-red-500 hover:bg-red-600 text-white font-semibold py-1.5 px-3 rounded-lg transition cursor-pointer">
-                                            🗑️ Hapus
+                                             Hapus
                                         </button>
                                     </form>
                                 </div>

@@ -5,7 +5,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between">
         <div>
-            <h2 class="text-2xl font-bold text-gray-800">✏️ Edit Produk</h2>
+            <h2 class="text-2xl font-bold text-gray-800"> Edit Produk</h2>
             <p class="text-sm text-gray-500 mt-1">Edit detail produk <strong>{{ $product->nama_kue }}</strong></p>
         </div>
         <a href="{{ route('admin.katalog') }}" class="text-sm text-gray-500 hover:text-gray-700 font-medium">← Kembali</a>
@@ -94,7 +94,7 @@
                     Batal
                 </a>
                 <button type="submit" class="px-6 py-2 text-sm font-semibold text-white bg-pink-500 rounded-lg hover:bg-pink-600 transition cursor-pointer shadow-sm">
-                    💾 Simpan Perubahan
+                     Simpan Perubahan
                 </button>
             </div>
         </form>

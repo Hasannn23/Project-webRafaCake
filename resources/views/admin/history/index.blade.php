@@ -4,7 +4,7 @@
 <div class="space-y-6" x-data="{ openDetail: false, detailData: null }">
     <div class="flex items-center justify-between flex-wrap gap-3">
         <div>
-            <h2 class="text-2xl font-bold text-gray-800">📜 List History Pemesanan</h2>
+            <h2 class="text-2xl font-bold text-gray-800"> List History Pemesanan</h2>
             <p class="text-sm text-gray-500 mt-1">Pesanan yang sudah selesai / ditolak</p>
         </div>
         <span class="bg-green-100 text-green-700 text-sm font-semibold px-3 py-1 rounded-full">
@@ -16,7 +16,7 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
         <form method="GET" action="{{ route('admin.history') }}" class="flex items-center gap-3">
             <div class="relative flex-1">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">🔍</span>
+                
                 <input 
                     type="text" 
                     name="search" 
@@ -29,7 +29,7 @@
                 Cari
             </button>
             @if(request('search'))
-                <a href="{{ route('admin.history') }}" class="text-sm text-gray-500 hover:text-red-500 transition font-medium">✕ Reset</a>
+                <a href="{{ route('admin.history') }}" class="text-sm text-gray-500 hover:text-red-500 transition font-medium"> Reset</a>
             @endif
         </form>
     </div>
@@ -37,7 +37,7 @@
     <!-- Info pencarian aktif -->
     @if(request('search'))
         <div class="bg-blue-50 border border-blue-200 text-blue-700 text-sm px-4 py-2 rounded-lg flex items-center gap-2">
-            🔍 Hasil pencarian: "<strong>{{ request('search') }}</strong>"
+             Hasil pencarian: "<strong>{{ request('search') }}</strong>"
             <span class="text-gray-400">—</span>
             <span>{{ $history->count() }} pesanan ditemukan</span>
         </div>
@@ -46,7 +46,7 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         @if($history->isEmpty())
             <div class="text-center py-12">
-                <span class="text-4xl">📋</span>
+                
                 <p class="text-gray-500 mt-3">
                     @if(request('search'))
                         Tidak ditemukan pesanan untuk "{{ request('search') }}".
@@ -103,7 +103,7 @@
                             </td>
                             <td class="p-4">
                                 <button @click='openDetail = true; detailData = @json($order)' class="text-xs bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1.5 px-3 rounded-lg transition cursor-pointer">
-                                    🔍 Detail
+                                     Detail
                                 </button>
                             </td>
                         </tr>
@@ -120,12 +120,12 @@
             <div x-show="openDetail" x-transition.opacity class="fixed inset-0 bg-gray-500 bg-opacity-75" @click="openDetail = false"></div>
             <div x-show="openDetail" x-transition class="relative bg-white rounded-xl shadow-xl max-w-lg w-full z-10">
                 <div class="px-6 pt-6 pb-4">
-                    <h3 class="text-lg font-bold text-gray-900 border-b pb-3 mb-4">🔍 Detail Pesanan</h3>
+                    <h3 class="text-lg font-bold text-gray-900 border-b pb-3 mb-4"> Detail Pesanan</h3>
                     <div class="text-sm text-gray-600 space-y-3">
                         <p><strong>ID Pesanan:</strong> #<span x-text="detailData?.id"></span></p>
                         <p><strong>Nama Pemesan:</strong> <span x-text="detailData?.nama_pemesan"></span></p>
                         <p><strong>No. WA:</strong> <span x-text="detailData?.nomor_wa"></span></p>
-                        <p><strong>Waktu Ambil:</strong> <span x-text="detailData ? new Date(detailData.waktu_pengambilan).toLocaleString('id-ID') : ''"></span></p>
+                        <p><strong>Waktu Ambil:</strong> <span x-text="detailData?.waktu_pengambilan ? new Date(detailData.waktu_pengambilan).toLocaleString('id-ID') : '-'"></span></p>
                         <p><strong>Status:</strong> 
                             <span x-show="detailData?.status === 'selesai'" class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-semibold">Selesai</span>
                             <span x-show="detailData?.status === 'ditolak'" class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full font-semibold">Ditolak</span>
@@ -137,7 +137,7 @@
                                 <ul class="list-disc pl-5 space-y-1">
                                     <template x-for="item in detailData.detail_tambahan" :key="item.name">
                                         <li>
-                                            <span x-text="item.name"></span> (<span x-text="item.quantity"></span>x)
+                                            <span x-text="item.name"></span> (x<span x-text="item.quantity"></span>)
                                             — <span class="font-medium" x-text="'Rp ' + (item.price * item.quantity).toLocaleString('id-ID')"></span>
                                         </li>
                                     </template>
@@ -147,14 +147,14 @@
 
                         <div class="border-t pt-3 flex justify-between font-bold text-lg text-pink-600">
                             <span>Total:</span>
-                            <span x-text="detailData?.total_harga ? 'Rp ' + detailData.total_harga.toLocaleString('id-ID') : '-'"></span>
+                            <span x-text="'Rp ' + (detailData?.total_harga ? detailData.total_harga.toLocaleString('id-ID') : '0')"></span>
                         </div>
 
                         {{-- Alasan Penolakan (hanya tampil untuk pesanan ditolak) --}}
                         <template x-if="detailData?.status === 'ditolak' && detailData?.alasan_penolakan">
                             <div class="border-t pt-3 mt-2">
                                 <div class="bg-red-50 border border-red-200 rounded-lg p-4">
-                                    <p class="font-bold text-red-700 mb-1">❌ Alasan Penolakan:</p>
+                                    <p class="font-bold text-red-700 mb-1"> Alasan Penolakan:</p>
                                     <p class="text-red-600 text-sm" x-text="detailData.alasan_penolakan"></p>
                                 </div>
                             </div>

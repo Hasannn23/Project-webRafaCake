@@ -7,25 +7,30 @@
     <title>Admin Dashboard - Rafa Cake</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-100 flex font-sans" x-data="{ sidebarOpen: true }">
+<body class="bg-gray-100 flex font-sans" x-data="{ sidebarOpen: false }">
 
     <!-- Sidebar -->
     @include('admin.partials.sidebar')
 
     <!-- Konten Utama -->
-    <div class="flex-1 ml-64 flex flex-col min-h-screen">
+    <div class="flex-1 md:ml-64 flex flex-col min-h-screen w-full transition-all duration-300">
         
         <!-- Header -->
-        <header class="bg-white shadow-sm border-b border-gray-200 px-6 py-4 flex justify-between items-center sticky top-0 z-40">
+        <header class="bg-white shadow-sm border-b border-gray-200 px-4 md:px-6 py-4 flex justify-between items-center sticky top-0 z-30">
             <div class="flex items-center gap-3">
-                <h2 class="text-lg font-semibold text-gray-800">Halo, {{ Auth::user()->name }}! 👋</h2>
+                <button @click="sidebarOpen = true" class="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+                <h2 class="text-lg font-semibold text-gray-800 hidden sm:block">Halo, {{ Auth::user()->name }}!</h2>
             </div>
             <div class="flex items-center gap-4">
-                <span class="text-sm text-gray-500">{{ now()->format('d M Y') }}</span>
+                <span class="text-sm text-gray-500 hidden sm:block">{{ now()->format('d M Y') }}</span>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="text-sm text-red-500 font-semibold hover:text-red-700 transition cursor-pointer">
-                        🚪 Logout
+                        Logout
                     </button>
                 </form>
             </div>
@@ -50,5 +55,29 @@
 
     </div>
 
+    <!-- Script Maintain Scroll Position -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() { 
+            const path = window.location.pathname;
+            const scrollpos = sessionStorage.getItem('scrollpos_' + path);
+            if (scrollpos) {
+                setTimeout(() => {
+                    window.scrollTo(0, parseInt(scrollpos));
+                    let mainEl = document.querySelector('main');
+                    if(mainEl) mainEl.scrollTop = parseInt(scrollpos);
+                }, 50);
+            }
+        });
+
+        window.addEventListener("beforeunload", function() {
+            const path = window.location.pathname;
+            let scrollpos = window.scrollY || document.documentElement.scrollTop;
+            let mainEl = document.querySelector('main');
+            if(mainEl && mainEl.scrollTop > 0) {
+                 scrollpos = mainEl.scrollTop;
+            }
+            sessionStorage.setItem('scrollpos_' + path, scrollpos);
+        });
+    </script>
 </body>
 </html>

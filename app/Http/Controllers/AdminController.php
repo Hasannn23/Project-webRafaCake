@@ -21,7 +21,7 @@ class AdminController extends Controller
         $totalProduk = Product::count();
         $pesananMasuk = Order::where('status', 'pending')->count();
         $totalMember = User::where('role', 'member')->count();
-        $totalReview = Review::count();
+        $totalReview = Review::where('is_deleted', 0)->count();
         $pesananSelesai = Order::where('status', 'selesai')->count();
 
         return view('admin.dashboardadmin', compact(
@@ -272,13 +272,15 @@ class AdminController extends Controller
     // ==========================================
     public function review()
     {
-        $reviews = Review::with(['user', 'order'])->latest()->get();
+        $reviews = Review::with(['user', 'order'])->where('is_deleted', 0)->latest()->get();
         return view('admin.review.index', compact('reviews'));
     }
 
     public function destroyReview($id)
     {
-        Review::findOrFail($id)->delete();
+        $review = Review::findOrFail($id);
+        $review->is_deleted = 1;
+        $review->save();
         return back()->with('success', 'Review berhasil dihapus.');
     }
 }

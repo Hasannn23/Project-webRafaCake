@@ -25,7 +25,7 @@ class ReviewController extends Controller
         }
 
         // Pastikan belum ada review untuk order ini
-        if ($order->review) {
+        if (Review::where('order_id', $order->id)->exists()) {
             return back()->with('error', 'Anda sudah memberikan review untuk pesanan ini.');
         }
 

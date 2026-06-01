@@ -132,13 +132,19 @@
                                                 </button>
                                                 {{-- Tombol Review / Edit Review --}}
                                                 @if($order->review)
-                                                    <button @click="openReview = true; reviewMode = 'edit'; reviewOrderId = {{ $order->id }}; reviewId = {{ $order->review->id }}; reviewRating = {{ $order->review->rating }}; reviewKomentar = '{{ addslashes($order->review->komentar) }}'" 
-                                                        class="text-xs bg-amber-500 hover:bg-amber-600 text-white font-bold py-1 px-3 rounded transition cursor-pointer">
-                                                        Edit Review
-                                                    </button>
+                                                    @if($order->review->is_deleted == 1)
+                                                        <span class="text-[10px] text-red-500 italic block mt-1 leading-tight max-w-[150px]">
+                                                            Review Anda melanggar panduan komunitas.
+                                                        </span>
+                                                    @else
+                                                        <button @click="openReview = true; reviewMode = 'edit'; reviewOrderId = {{ $order->id }}; reviewId = {{ $order->review->id }}; reviewRating = {{ $order->review->rating }}; reviewKomentar = '{{ addslashes($order->review->komentar) }}'" 
+                                                            class="text-xs bg-amber-500 hover:bg-amber-600 text-white font-bold py-1 px-3 rounded transition cursor-pointer mt-1">
+                                                            Edit Review
+                                                        </button>
+                                                    @endif
                                                 @else
                                                     <button @click="openReview = true; reviewMode = 'create'; reviewOrderId = {{ $order->id }}; reviewId = null; reviewRating = 0; reviewKomentar = ''" 
-                                                        class="text-xs bg-pink-500 hover:bg-pink-600 text-white font-bold py-1 px-3 rounded transition cursor-pointer">
+                                                        class="text-xs bg-pink-500 hover:bg-pink-600 text-white font-bold py-1 px-3 rounded transition cursor-pointer mt-1">
                                                         Review
                                                     </button>
                                                 @endif
@@ -202,6 +208,12 @@
                                         <span>Total:</span>
                                         <span x-text="detailData?.total_harga ? 'Rp ' + detailData.total_harga.toLocaleString('id-ID') : '-'"></span>
                                     </div>
+                                    <template x-if="detailData?.status === 'ditolak' && detailData?.alasan_penolakan">
+                                        <div class="border-t pt-3 mt-3">
+                                            <p class="font-bold mb-2 text-red-600">Alasan Penolakan:</p>
+                                            <p class="text-sm text-gray-700" x-text="detailData.alasan_penolakan"></p>
+                                        </div>
+                                    </template>
                                 </div>
                             </div>
                         </div>
