@@ -45,21 +45,9 @@
                     <select name="kategori" id="kategori" required
                         class="w-full rounded-lg border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 text-sm">
                         <option value="">Pilih Kategori</option>
-                        <option value="Wedding cake 3 susun" {{ old('kategori') == 'Wedding cake 3 susun' ? 'selected' : '' }}>Wedding cake 3 susun</option>
-                        <option value="Cake potong" {{ old('kategori') == 'Cake potong' ? 'selected' : '' }}>Cake potong</option>
-                        <option value="Pizza" {{ old('kategori') == 'Pizza' ? 'selected' : '' }}>Pizza</option>
-                        <option value="Aneka Roti tepakan" {{ old('kategori') == 'Aneka Roti tepakan' ? 'selected' : '' }}>Aneka Roti tepakan</option>
-                        <option value="Aneka bolu medium" {{ old('kategori') == 'Aneka bolu medium' ? 'selected' : '' }}>Aneka bolu medium</option>
-                        <option value="Aneka Bolu pisang" {{ old('kategori') == 'Aneka Bolu pisang' ? 'selected' : '' }}>Aneka Bolu pisang</option>
-                        <option value="Aneka bolu jadul" {{ old('kategori') == 'Aneka bolu jadul' ? 'selected' : '' }}>Aneka bolu jadul</option>
-                        <option value="Aneka dessert" {{ old('kategori') == 'Aneka dessert' ? 'selected' : '' }}>Aneka dessert</option>
-                        <option value="Roti" {{ old('kategori') == 'Roti' ? 'selected' : '' }}>Roti</option>
-                        <option value="Cupcakes butterkrim size mini" {{ old('kategori') == 'Cupcakes butterkrim size mini' ? 'selected' : '' }}>Cupcakes butterkrim size mini</option>
-                        <option value="Cupcake ukuran standar" {{ old('kategori') == 'Cupcake ukuran standar' ? 'selected' : '' }}>Cupcake ukuran standar</option>
-                        <option value="Cake layer panjang" {{ old('kategori') == 'Cake layer panjang' ? 'selected' : '' }}>Cake layer panjang</option>
-                        <option value="Cake decor full butter krim" {{ old('kategori') == 'Cake decor full butter krim' ? 'selected' : '' }}>Cake decor full butter krim</option>
-                        <option value="Donat" {{ old('kategori') == 'Donat' ? 'selected' : '' }}>Donat</option>
-                        <option value="Menu Kedai" {{ old('kategori') == 'Menu Kedai' ? 'selected' : '' }}>Menu Kedai</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->nama }}" {{ old('kategori') == $category->nama ? 'selected' : '' }}>{{ $category->nama }}</option>
+                        @endforeach
                     </select>
                     @error('kategori') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>

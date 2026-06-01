@@ -79,6 +79,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/users', [AdminController::class, 'storeUser'])->name('users.store');
     Route::put('/users/{id}', [AdminController::class, 'updateUser'])->name('users.update');
     Route::delete('/users/{id}', [AdminController::class, 'destroyUser'])->name('users.destroy');
+
+    // Kelola Kategori (CRUD)
+    Route::get('/kategori', [AdminController::class, 'categories'])->name('kategori');
+    Route::post('/kategori', [AdminController::class, 'storeCategory'])->name('kategori.store');
+    Route::put('/kategori/{id}', [AdminController::class, 'updateCategory'])->name('kategori.update');
+    Route::delete('/kategori/{id}', [AdminController::class, 'destroyCategory'])->name('kategori.destroy');
 });
 
 require __DIR__.'/auth.php';

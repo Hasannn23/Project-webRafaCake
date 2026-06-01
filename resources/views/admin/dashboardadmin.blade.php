@@ -10,7 +10,7 @@
     </div>
 
     <!-- Stats Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         <!-- Total Produk -->
         <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition group">
             <div class="flex justify-between items-start">
@@ -54,6 +54,17 @@
             </div>
             <a href="{{ route('admin.review') }}" class="mt-3 inline-block text-xs text-emerald-500 hover:text-emerald-700 font-medium">Kelola Review →</a>
         </div>
+
+        <!-- Total Kategori -->
+        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition group">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-sm text-gray-500 mb-1">Total Kategori</p>
+                    <h3 class="text-3xl font-bold text-gray-800 group-hover:text-purple-600 transition">{{ $totalKategori }}</h3>
+                </div>
+            </div>
+            <a href="{{ route('admin.kategori') }}" class="mt-3 inline-block text-xs text-purple-500 hover:text-purple-700 font-medium">Kelola Kategori →</a>
+        </div>
     </div>
 
     <!-- Quick Summary -->
@@ -91,6 +102,9 @@
                 </a>
                 <a href="{{ route('admin.users') }}" class="flex items-center gap-2 p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition text-sm text-blue-700 font-medium">
                     Kelola User
+                </a>
+                <a href="{{ route('admin.kategori') }}" class="flex items-center gap-2 p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition text-sm text-purple-700 font-medium">
+                    Kelola Kategori
                 </a>
                 <a href="{{ route('admin.history') }}" class="flex items-center gap-2 p-3 bg-green-50 rounded-lg hover:bg-green-100 transition text-sm text-green-700 font-medium">
                     Lihat History

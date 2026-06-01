@@ -43,6 +43,12 @@
             <span class="text-sm">Kelola Katalog</span>
         </a>
 
+        <!-- Kelola Kategori -->
+        <a href="{{ route('admin.kategori') }}" 
+           class="flex items-center gap-3 py-2.5 px-4 rounded-lg transition duration-200 {{ str_starts_with($currentRoute, 'admin.kategori') ? 'bg-white/20 text-white font-semibold' : 'text-pink-200 hover:bg-white/10 hover:text-white' }}">
+            <span class="text-sm">Kelola Kategori</span>
+        </a>
+
         <!-- Kelola User -->
         <a href="{{ route('admin.users') }}" 
            class="flex items-center gap-3 py-2.5 px-4 rounded-lg transition duration-200 {{ str_starts_with($currentRoute, 'admin.users') ? 'bg-white/20 text-white font-semibold' : 'text-pink-200 hover:bg-white/10 hover:text-white' }}">

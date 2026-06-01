@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Review;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -23,9 +24,10 @@ class AdminController extends Controller
         $totalMember = User::where('role', 'member')->count();
         $totalReview = Review::where('is_deleted', 0)->count();
         $pesananSelesai = Order::where('status', 'selesai')->count();
+        $totalKategori = Category::count();
 
         return view('admin.dashboardadmin', compact(
-            'totalProduk', 'pesananMasuk', 'totalMember', 'totalReview', 'pesananSelesai'
+            'totalProduk', 'pesananMasuk', 'totalMember', 'totalReview', 'pesananSelesai', 'totalKategori'
         ));
     }
 
@@ -42,14 +44,15 @@ class AdminController extends Controller
         }
 
         $products = $query->paginate(10)->appends($request->query());
-        $kategoriList = Product::select('kategori')->distinct()->orderBy('kategori')->pluck('kategori');
+        $kategoriList = Category::orderBy('nama')->pluck('nama');
 
         return view('admin.katalog.index', compact('products', 'kategoriList'));
     }
 
     public function createProduct()
     {
-        return view('admin.katalog.create');
+        $categories = Category::orderBy('nama')->get();
+        return view('admin.katalog.create', compact('categories'));
     }
 
     public function storeProduct(Request $request)
@@ -83,7 +86,8 @@ class AdminController extends Controller
     public function editProduct($id)
     {
         $product = Product::findOrFail($id);
-        return view('admin.katalog.edit', compact('product'));
+        $categories = Category::orderBy('nama')->get();
+        return view('admin.katalog.edit', compact('product', 'categories'));
     }
 
     public function updateProduct(Request $request, $id)
@@ -282,5 +286,59 @@ class AdminController extends Controller
         $review->is_deleted = 1;
         $review->save();
         return back()->with('success', 'Review berhasil dihapus.');
+    }
+
+    // ==========================================
+    // KELOLA KATEGORI (CRUD)
+    // ==========================================
+    public function categories()
+    {
+        $categories = Category::withCount('products')->orderBy('nama')->get();
+        return view('admin.kategori.index', compact('categories'));
+    }
+
+    public function storeCategory(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:255|unique:categories,nama',
+        ]);
+
+        Category::create([
+            'nama' => $request->nama,
+        ]);
+
+        return redirect()->route('admin.kategori')->with('success', 'Kategori berhasil ditambahkan!');
+    }
+
+    public function updateCategory(Request $request, $id)
+    {
+        $category = Category::findOrFail($id);
+
+        $request->validate([
+            'nama' => 'required|string|max:255|unique:categories,nama,' . $category->id,
+        ]);
+
+        // Update juga nama kategori di semua produk yang menggunakan kategori ini
+        Product::where('kategori', $category->nama)->update(['kategori' => $request->nama]);
+
+        $category->update([
+            'nama' => $request->nama,
+        ]);
+
+        return redirect()->route('admin.kategori')->with('success', 'Kategori berhasil diperbarui!');
+    }
+
+    public function destroyCategory($id)
+    {
+        $category = Category::findOrFail($id);
+
+        // Cek apakah masih ada produk yang menggunakan kategori ini
+        $productCount = Product::where('kategori', $category->nama)->count();
+        if ($productCount > 0) {
+            return back()->with('error', "Kategori \"{$category->nama}\" tidak bisa dihapus karena masih digunakan oleh {$productCount} produk.");
+        }
+
+        $category->delete();
+        return back()->with('success', 'Kategori berhasil dihapus.');
     }
 }
