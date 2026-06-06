@@ -109,7 +109,7 @@
             @auth
                 @if(Auth::user()->role !== 'admin')
                     <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard Saya') }}
+                        {{ __('Riwayat Pesanan') }}
                     </x-responsive-nav-link>
                 @endif
 

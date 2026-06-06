@@ -153,7 +153,7 @@ class AdminController extends Controller
     // ==========================================
     public function users()
     {
-        $users = User::where('role', 'member')->latest()->get();
+        $users = User::withCount('orders')->where('role', 'member')->latest()->get();
         return view('admin.users.index', compact('users'));
     }
 
@@ -210,7 +210,7 @@ class AdminController extends Controller
     // ==========================================
     public function pesanan()
     {
-        $orders = Order::with('user')->whereIn('status', ['pending', 'disetujui'])->orderBy('waktu_pengambilan', 'asc')->get();
+        $orders = Order::with('user')->whereIn('status', ['pending', 'disetujui'])->orderBy('waktu_pengambilan', 'asc')->paginate(10);
         return view('admin.pesanan.index', compact('orders'));
     }
 
@@ -255,19 +255,16 @@ class AdminController extends Controller
     {
         $query = Order::with('user')->whereIn('status', ['selesai', 'ditolak']);
 
-        // Pencarian berdasarkan nama pemesan atau nama akun member
+        // Pencarian berdasarkan nama akun member
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('nama_pemesan', 'like', "%{$search}%")
-                  ->orWhereHas('user', function ($q2) use ($search) {
-                      $q2->where('name', 'like', "%{$search}%")
-                         ->orWhere('email', 'like', "%{$search}%");
-                  });
+            $query->whereHas('user', function ($q2) use ($search) {
+                $q2->where('name', 'like', "%{$search}%")
+                   ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
-        $history = $query->latest()->get();
+        $history = $query->latest()->paginate(10)->appends($request->query());
         return view('admin.history.index', compact('history'));
     }
 
@@ -276,7 +273,7 @@ class AdminController extends Controller
     // ==========================================
     public function review()
     {
-        $reviews = Review::with(['user', 'order'])->where('is_deleted', 0)->latest()->get();
+        $reviews = Review::with(['user', 'order'])->where('is_deleted', 0)->latest()->paginate(10);
         return view('admin.review.index', compact('reviews'));
     }
 
@@ -293,7 +290,7 @@ class AdminController extends Controller
     // ==========================================
     public function categories()
     {
-        $categories = Category::withCount('products')->orderBy('nama')->get();
+        $categories = Category::withCount('products')->orderBy('nama')->paginate(10);
         return view('admin.kategori.index', compact('categories'));
     }
 

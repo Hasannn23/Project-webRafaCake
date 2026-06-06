@@ -35,7 +35,7 @@
                     <tbody class="divide-y divide-gray-50">
                         @foreach($reviews as $i => $review)
                         <tr class="hover:bg-gray-50/50 transition">
-                            <td class="p-4 text-sm text-gray-600">{{ $i + 1 }}</td>
+                            <td class="p-4 text-sm text-gray-600">{{ $reviews->firstItem() + $i }}</td>
                             <td class="p-4">
                                 <div class="flex items-center gap-2">
                                     <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 font-bold text-xs">
@@ -48,7 +48,7 @@
                             <td class="p-4">
                                 <div class="flex items-center gap-0.5">
                                     @for($s = 1; $s <= 5; $s++)
-                                        <span class="text-sm">{{ $s <= $review->rating ? '' : '' }}</span>
+                                        <span class="text-sm">{{ $s <= $review->rating ? '⭐' : '☆' }}</span>
                                     @endfor
                                 </div>
                             </td>
@@ -74,6 +74,9 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+            <div class="p-4 border-t">
+                {{ $reviews->links() }}
             </div>
         @endif
     </div>

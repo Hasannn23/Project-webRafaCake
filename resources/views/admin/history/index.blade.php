@@ -73,7 +73,7 @@
                     <tbody class="divide-y divide-gray-50">
                         @foreach($history as $order)
                         <tr class="hover:bg-gray-50/50 transition">
-                            <td class="p-4 text-sm font-medium text-gray-800">{{ $loop->iteration }}</td>
+                            <td class="p-4 text-sm font-medium text-gray-800">{{ $history->firstItem() + $loop->index }}</td>
                             <td class="p-4">
                                 <p class="font-semibold text-gray-800 text-sm">{{ $order->nama_pemesan }}</p>
                                 <p class="text-xs text-gray-400">{{ $order->user->name ?? '-' }}</p>
@@ -110,6 +110,9 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+            <div class="p-4 border-t">
+                {{ $history->links() }}
             </div>
         @endif
     </div>

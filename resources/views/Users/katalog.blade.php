@@ -31,24 +31,10 @@
                         <div :class="showAllCategories ? 'max-h-[1000px]' : 'max-h-[44px] sm:max-h-[48px]'" 
                              class="flex flex-wrap gap-3 overflow-hidden transition-[max-height] duration-500 ease-in-out">
                             @php
-                                $categories = [
-                                    'Semua',
-                                    'Wedding cake 3 susun',
-                                    'Cake potong',
-                                    'Pizza',
-                                    'Aneka Roti tepakan',
-                                    'Aneka bolu medium',
-                                    'Aneka Bolu pisang',
-                                    'Aneka bolu jadul',
-                                    'Aneka dessert',
-                                    'Roti',
-                                    'Cupcakes butterkrim size mini',
-                                    'Cupcake ukuran standar',
-                                    'Cake layer panjang',
-                                    'Cake decor full butter krim'
-                                ];
+                                // Ensure 'Semua' is the first category in the array
+                                $displayCategories = array_merge(['Semua'], $categories ?? []);
                             @endphp
-                            @foreach($categories as $category)
+                            @foreach($displayCategories as $category)
                                 <button type="button" 
                                         @click="selectedCategory = '{{ $category }}'"
                                         :class="selectedCategory === '{{ $category }}' ? 'bg-rafa-dark-pink text-white shadow-md' : 'bg-white text-gray-700 hover:bg-pink-100 shadow-sm'"
@@ -309,8 +295,8 @@
                     </button>
 
                     <div class="sm:flex">
-                        <div class="w-full sm:w-1/2">
-                            <img :src="selectedProduct?.image" :alt="selectedProduct?.name" class="w-full h-64 sm:h-full object-cover">
+                        <div class="w-full sm:w-1/2 bg-gray-50 flex items-center justify-center">
+                            <img :src="selectedProduct?.image" :alt="selectedProduct?.name" class="w-full h-64 sm:h-full object-contain bg-gray-50">
                         </div>
                         <div class="w-full sm:w-1/2 p-6 flex flex-col justify-between">
                             <div>
@@ -318,7 +304,7 @@
                                 <h3 class="text-2xl font-bold text-gray-900 mb-2" x-text="selectedProduct?.name"></h3>
                                 <p class="text-2xl font-bold text-rafa-dark-pink mb-4" x-text="selectedProduct?.price ? 'Rp ' + selectedProduct.price.toLocaleString('id-ID') : ''"></p>
                                 <div class="text-gray-600 text-sm mb-6 max-h-48 overflow-y-auto pr-2">
-                                    <p x-text="selectedProduct?.description"></p>
+                                    <p class="whitespace-pre-wrap break-words" x-text="selectedProduct?.description"></p>
                                 </div>
                             </div>
                             
@@ -345,7 +331,7 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('shoppingCart', () => ({
                 isCartOpen: false,
-                cart: JSON.parse(localStorage.getItem('rafa_cart')) || [],
+                cart: JSON.parse(localStorage.getItem('rafa_cart_{{ auth()->id() ?? 'guest' }}')) || [],
                 
                 isProductModalOpen: false,
                 selectedProduct: null,
@@ -373,7 +359,7 @@
                 },
                 
                 saveCart() {
-                    localStorage.setItem('rafa_cart', JSON.stringify(this.cart));
+                    localStorage.setItem('rafa_cart_{{ auth()->id() ?? 'guest' }}', JSON.stringify(this.cart));
                 },
                 
                 addToCart(id, name, price, image) {

@@ -114,7 +114,7 @@
                     <tbody class="divide-y divide-gray-50">
                         @foreach($orders as $order)
                         <tr class="hover:bg-gray-50/50 transition">
-                            <td class="p-4 text-sm font-medium text-gray-800">{{ $loop->iteration }}</td>
+                            <td class="p-4 text-sm font-medium text-gray-800">{{ $orders->firstItem() + $loop->index }}</td>
                             <td class="p-4">
                                 <p class="font-semibold text-gray-800 text-sm">{{ $order->nama_pemesan }}</p>
                                 <p class="text-xs text-gray-400">{{ $order->nomor_wa }}</p>
@@ -178,6 +178,8 @@
                                             $cleanWaNumber = '62' . substr($cleanWaNumber, 1);
                                         }
                                         $waUrl = "https://wa.me/" . $cleanWaNumber . "?text=" . urlencode($waText);
+                                        $waUmumText = "Halo {$order->nama_pemesan}, terkait pesanan anda";
+                                        $waUmumUrl = "https://wa.me/" . $cleanWaNumber . "?text=" . urlencode($waUmumText);
                                     @endphp
 
                                     {{-- Detail Button --}}
@@ -195,21 +197,21 @@
                                             </button>
                                         </form>
                                     @elseif($order->status == 'disetujui')
-                                        <form action="{{ $waUrl }}" method="GET" target="_blank" class="inline-block">
-                                            <button type="submit" class="text-xs bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1.5 px-3 rounded-lg transition cursor-pointer">
-                                                 Hubungi WA
+                                        <a href="{{ $waUmumUrl }}" target="_blank" class="inline-block text-xs bg-green-500 hover:bg-green-600 text-white font-semibold py-1.5 px-3 rounded-lg transition cursor-pointer">
+                                             Hubungi WA
+                                        </a>
+                                        <a href="{{ $waUrl }}" target="_blank" class="inline-block text-xs bg-purple-500 hover:bg-purple-600 text-white font-semibold py-1.5 px-3 rounded-lg transition cursor-pointer">
+                                             Invoice
+                                        </a>
+                                        <form action="{{ route('admin.pesanan.updateStatus', $order->id) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="status" value="selesai">
+                                            <button type="submit" class="text-xs bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1.5 px-3 rounded-lg transition cursor-pointer" onclick="return confirm('Pesanan selesai dan dipindah ke history #{{ $order->id }}?')">
+                                                 Selesai
                                             </button>
                                         </form>
                                     @endif
-                                    {{-- Selesai --}}
-                                    <form action="{{ route('admin.pesanan.updateStatus', $order->id) }}" method="POST">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="hidden" name="status" value="selesai">
-                                        <button type="submit" class="text-xs bg-green-500 hover:bg-green-600 text-white font-semibold py-1.5 px-3 rounded-lg transition cursor-pointer" onclick="return confirm('Pesanan selesai dan dipindah ke history #{{ $order->id }}?')">
-                                             Selesai
-                                        </button>
-                                    </form>
                                     {{-- Tolak (membuka modal) --}}
                                     <button @click="openTolak = true; tolakOrderId = {{ $order->id }}; tolakOrderData = @js($order); alasanPenolakan = '';" class="text-xs bg-red-500 hover:bg-red-600 text-white font-semibold py-1.5 px-3 rounded-lg transition cursor-pointer">
                                          Tolak
@@ -220,6 +222,9 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+            <div class="p-4 border-t">
+                {{ $orders->links() }}
             </div>
         @endif
     </div>

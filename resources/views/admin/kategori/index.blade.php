@@ -41,7 +41,7 @@
                     <tbody class="divide-y divide-gray-50">
                         @foreach($categories as $i => $category)
                         <tr class="hover:bg-gray-50/50 transition">
-                            <td class="p-4 text-sm text-gray-600">{{ $i + 1 }}</td>
+                            <td class="p-4 text-sm text-gray-600">{{ $categories->firstItem() + $i }}</td>
                             <td class="p-4">
                                 <div class="flex items-center gap-3">
                                     <div class="w-9 h-9 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-bold text-sm">
@@ -75,6 +75,9 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+            <div class="p-4 border-t">
+                {{ $categories->links() }}
             </div>
         @endif
     </div>

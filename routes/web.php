@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\Route;
 */
 Route::get('/', function () {
     $products = \App\Models\Product::all();
-    return view('Users.katalog', compact('products'));
+    $categories = \App\Models\Category::pluck('nama')->toArray();
+    return view('Users.katalog', compact('products', 'categories'));
 })->name('produk');
 
 /*
@@ -28,8 +29,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $orders = \App\Models\Order::with('review')
             ->where('user_id', auth()->id())
             ->latest()
-            ->get();
-        return view('Users.dashboard.dashboardusers', compact('orders'));
+            ->paginate(10);
+        $categories = \App\Models\Category::pluck('nama')->toArray();
+        return view('Users.dashboard.dashboardusers', compact('orders', 'categories'));
     })->name('dashboard');
 
     // Proses Pemesanan Member

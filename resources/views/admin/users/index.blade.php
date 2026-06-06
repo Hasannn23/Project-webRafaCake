@@ -32,6 +32,7 @@
                             <th class="p-4 font-semibold">#</th>
                             <th class="p-4 font-semibold">Nama</th>
                             <th class="p-4 font-semibold">Email</th>
+                            <th class="p-4 font-semibold">Total Order</th>
                             <th class="p-4 font-semibold">Tanggal Daftar</th>
                             <th class="p-4 font-semibold">Aksi</th>
                         </tr>
@@ -49,6 +50,7 @@
                                 </div>
                             </td>
                             <td class="p-4 text-sm text-gray-600">{{ $user->email }}</td>
+                            <td class="p-4 text-sm font-semibold text-pink-600">{{ $user->orders_count }} kali</td>
                             <td class="p-4 text-sm text-gray-500">{{ $user->created_at->format('d M Y') }}</td>
                             <td class="p-4">
                                 <div class="flex items-center gap-2">
