@@ -19,7 +19,7 @@
                     <h3 class="text-3xl font-bold text-gray-800 group-hover:text-pink-600 transition">{{ $totalProduk }}</h3>
                 </div>
             </div>
-            <a href="{{ route('admin.katalog') }}" class="mt-3 inline-block text-xs text-pink-500 hover:text-pink-700 font-medium">Kelola Katalog →</a>
+            <a href="{{ route('admin.produk') }}" class="mt-3 inline-block text-xs text-pink-500 hover:text-pink-700 font-medium">Kelola Produk →</a>
         </div>
 
         <!-- Pesanan Masuk -->
@@ -94,7 +94,7 @@
         <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <h4 class="font-bold text-gray-800 mb-4">Aksi Cepat</h4>
             <div class="grid grid-cols-2 gap-3">
-                <a href="{{ route('admin.katalog.create') }}" class="flex items-center gap-2 p-3 bg-pink-50 rounded-lg hover:bg-pink-100 transition text-sm text-pink-700 font-medium">
+                <a href="{{ route('admin.produk.create') }}" class="flex items-center gap-2 p-3 bg-pink-50 rounded-lg hover:bg-pink-100 transition text-sm text-pink-700 font-medium">
                     Tambah Produk
                 </a>
                 <a href="{{ route('admin.pesanan') }}" class="flex items-center gap-2 p-3 bg-amber-50 rounded-lg hover:bg-amber-100 transition text-sm text-amber-700 font-medium">

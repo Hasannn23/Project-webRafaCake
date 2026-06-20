@@ -23,7 +23,7 @@
             </svg>
         </button>
     </div>
-    <p class="text-pink-300 text-xs mt-1 px-6">Admin Panel</p>
+    
 
     <!-- Navigation -->
     <nav class="mt-4 px-3 space-y-1">
@@ -37,10 +37,10 @@
             <span class="text-sm">Dashboard</span>
         </a>
 
-        <!-- Kelola Katalog -->
-        <a href="{{ route('admin.katalog') }}" 
-           class="flex items-center gap-3 py-2.5 px-4 rounded-lg transition duration-200 {{ str_starts_with($currentRoute, 'admin.katalog') ? 'bg-white/20 text-white font-semibold' : 'text-pink-200 hover:bg-white/10 hover:text-white' }}">
-            <span class="text-sm">Kelola Katalog</span>
+        <!-- Kelola Produk -->
+        <a href="{{ route('admin.produk') }}" 
+           class="flex items-center gap-3 py-2.5 px-4 rounded-lg transition duration-200 {{ str_starts_with($currentRoute, 'admin.produk') ? 'bg-white/20 text-white font-semibold' : 'text-pink-200 hover:bg-white/10 hover:text-white' }}">
+            <span class="text-sm">Kelola Produk</span>
         </a>
 
         <!-- Kelola Kategori -->

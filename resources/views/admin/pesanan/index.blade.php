@@ -157,19 +157,17 @@
                                             }
                                         }
                                         
-                                        $waText .= "Ongkos Kirim = Rp 0\n\n";
                                         $waText .= " TOTAL HARGA = Rp " . number_format($order->total_harga, 0, ',', '.') . "\n\n";
                                         
                                         $waText .= " IDENTITAS PEMBAYARAN\n";
-                                        $waText .= "Silakan lakukan transfer ke salah satu rekening berikut:\n\n";
-                                        $waText .= "BCA: 1234567890 a.n Admin Rafa Cake\n\n";
-                                        $waText .= "Mandiri: 0987654321 a.n Admin Rafa Cake\n\n";
-                                        $waText .= "Gopay/OVO: 081234567890 a.n Admin Rafa Cake\n\n";
+                                        $waText .= "Silahkan transfer ke :\n\n";
+                                        $waText .= "BCA: 8180129082 a.n suratno\n\n";
+                                        $waText .= "Dana: 085624378677 a.n Eva\n\n";
+                                        
                                         
                                         $waText .= " PANDUAN PEMBAYARAN\n\n";
                                         $waText .= "Pastikan nominal transfer sesuai persis dengan Total Harga di atas.\n\n";
-                                        $waText .= "Jika sudah berhasil transfer, mohon balas pesan ini dengan melampirkan Bukti Transfer (foto/screenshot).\n\n";
-                                        $waText .= "Pesanan kamu akan langsung kami proses setelah pembayaran terverifikasi.\n\n";
+                                        $waText .= "Jika sudah melakukan pembayaran, mohon konfirmasi dengan melampirkan Bukti Transfer (foto/screenshot).\n\n";
                                         $waText .= "Kalau ada kendala atau pertanyaan, langsung balas pesan ini aja ya. Terima kasih!";
 
                                         $cleanWaNumber = preg_replace('/[^0-9]/', '', $order->nomor_wa);

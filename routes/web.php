@@ -58,14 +58,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Dashboard Utama Admin
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
 
-    // Kelola Katalog (CRUD)
-    Route::get('/katalog', [AdminController::class, 'katalog'])->name('katalog');
-    Route::get('/katalog/create', [AdminController::class, 'createProduct'])->name('katalog.create');
-    Route::post('/katalog', [AdminController::class, 'storeProduct'])->name('katalog.store');
-    Route::get('/katalog/{id}/edit', [AdminController::class, 'editProduct'])->name('katalog.edit');
-    Route::put('/katalog/{id}', [AdminController::class, 'updateProduct'])->name('katalog.update');
-    Route::delete('/katalog/{id}', [AdminController::class, 'destroyProduct'])->name('katalog.destroy');
-    Route::patch('/katalog/{id}/toggle-status', [AdminController::class, 'toggleProductStatus'])->name('katalog.toggleStatus');
+    // Kelola Produk (CRUD)
+    Route::get('/produk', [AdminController::class, 'katalog'])->name('produk');
+    Route::get('/produk/create', [AdminController::class, 'createProduct'])->name('produk.create');
+    Route::post('/produk', [AdminController::class, 'storeProduct'])->name('produk.store');
+    Route::get('/produk/{id}/edit', [AdminController::class, 'editProduct'])->name('produk.edit');
+    Route::put('/produk/{id}', [AdminController::class, 'updateProduct'])->name('produk.update');
+    Route::delete('/produk/{id}', [AdminController::class, 'destroyProduct'])->name('produk.destroy');
+    Route::patch('/produk/{id}/toggle-status', [AdminController::class, 'toggleProductStatus'])->name('produk.toggleStatus');
     
     // Kelola Pemesanan & History
     Route::get('/pesanan', [AdminController::class, 'pesanan'])->name('pesanan');
@@ -79,7 +79,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Kelola User (CRUD)
     Route::get('/users', [AdminController::class, 'users'])->name('users');
     Route::post('/users', [AdminController::class, 'storeUser'])->name('users.store');
-    Route::put('/users/{id}', [AdminController::class, 'updateUser'])->name('users.update');
     Route::delete('/users/{id}', [AdminController::class, 'destroyUser'])->name('users.destroy');
 
     // Kelola Kategori (CRUD)

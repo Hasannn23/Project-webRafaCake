@@ -36,8 +36,8 @@
                             @endphp
                             @foreach($displayCategories as $category)
                                 <button type="button" 
-                                        @click="selectedCategory = '{{ $category }}'"
-                                        :class="selectedCategory === '{{ $category }}' ? 'bg-rafa-dark-pink text-white shadow-md' : 'bg-white text-gray-700 hover:bg-pink-100 shadow-sm'"
+                                        @click="selectedCategory = {{ json_encode($category) }}"
+                                        :class="selectedCategory === {{ json_encode($category) }} ? 'bg-rafa-dark-pink text-white shadow-md' : 'bg-white text-gray-700 hover:bg-pink-100 shadow-sm'"
                                         class="px-4 py-2 rounded-full font-bold transition text-sm sm:text-base cursor-pointer text-center border border-pink-100 whitespace-nowrap">
                                     {{ $category }}
                                 </button>
@@ -53,10 +53,9 @@
                         </div>
                     </div>
 
-                    <!-- Grid Produk -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         @foreach($products as $product)
-                        <div x-show="selectedCategory === 'Semua' || selectedCategory === '{{ addslashes($product->kategori) }}'"
+                        <div x-show="selectedCategory === 'Semua' || selectedCategory.toLowerCase() === {{ json_encode(strtolower($product->kategori)) }}"
                              x-transition
                              class="bg-white rounded-2xl shadow-lg overflow-hidden border border-pink-50 transition duration-300 flex flex-col {{ $product->is_available ? 'hover:shadow-2xl' : 'opacity-75 grayscale' }}" style="display: none;">
                             
@@ -74,7 +73,7 @@
                                     {{ $product->kategori }}
                                 </span>
                                 <h3 class="mt-3 text-xl font-bold text-gray-900">{{ $product->nama_kue }}</h3>
-                                <p class="mt-2 text-gray-600 text-sm line-clamp-2 flex-grow">{{ $product->deskripsi }}</p>
+                                <p class="mt-2 text-gray-600 text-sm line-clamp-2 flex-grow whitespace-pre-wrap">{{ $product->deskripsi }}</p>
                                 
                                 <div class="mt-4 flex items-center justify-between">
                                     <span class="text-2xl font-bold text-rafa-dark-pink">Rp {{ number_format($product->harga, 0, ',', '.') }}</span>
@@ -84,7 +83,7 @@
                                     @auth
                                         @if(auth()->user()->role == 'member' || auth()->user()->role == 'user' || auth()->user()->usertype == 'user' || !isset(auth()->user()->role))
                                             @if($product->is_available)
-                                                <button type="button" @click="openProductModal({{ $product->id }}, '{{ addslashes($product->nama_kue) }}', {{ $product->harga }}, '{{ asset('storage/' . $product->gambar) }}', '{{ addslashes($product->deskripsi) }}', '{{ addslashes($product->kategori) }}')" 
+                                                <button type="button" @click="openProductModal({{ $product->id }}, {{ json_encode($product->nama_kue) }}, {{ $product->harga }}, {{ json_encode(asset('storage/' . $product->gambar)) }}, {{ json_encode($product->deskripsi) }}, {{ json_encode($product->kategori) }})" 
                                                         class="w-full bg-rafa-dark-pink hover:bg-pink-700 text-white font-bold py-3 rounded-xl transition flex justify-center items-center gap-2 cursor-pointer">
                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                                     Detail Produk
@@ -95,7 +94,7 @@
                                                 </button>
                                             @endif
                                         @else
-                                            <a href="{{ route('admin.katalog') }}" class="block text-center w-full bg-gray-800 text-white py-3 rounded-xl">Kelola Produk</a>
+                                            <a href="{{ route('admin.produk') }}" class="block text-center w-full bg-gray-800 text-white py-3 rounded-xl">Kelola Produk</a>
                                         @endif
                                     @endauth
 
@@ -234,11 +233,11 @@
                                         </div>
                                         <div>
                                             <label class="block text-sm font-semibold text-gray-700 mb-1">Nomor WhatsApp Aktif</label>
-                                            <input type="text" name="nomor_wa" required placeholder="Contoh: 08123456789" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm">
+                                            <input type="tel" name="nomor_wa" required pattern="^(08|628)\d{8,11}$" title="Nomor WhatsApp harus diawali dengan 08 atau 628 dan terdiri dari 10 hingga 13 angka" placeholder="Contoh: 08123456789" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm">
                                         </div>
                                         <div>
                                             <label class="block text-sm font-semibold text-gray-700 mb-1">Waktu Pengambilan/Kirim</label>
-                                            <input type="datetime-local" name="waktu_pengambilan" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm">
+                                            <input type="datetime-local" name="waktu_pengambilan" required x-init="const now = new Date(); now.setMinutes(now.getMinutes() - now.getTimezoneOffset()); $el.min = now.toISOString().slice(0,16);" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm">
                                         </div>
                                     </div>
 
@@ -303,7 +302,7 @@
                                 <span class="text-xs font-bold uppercase tracking-wider text-rafa-dark-pink bg-rafa-pink-100 px-3 py-1 rounded-full inline-block mb-3" x-text="selectedProduct?.category"></span>
                                 <h3 class="text-2xl font-bold text-gray-900 mb-2" x-text="selectedProduct?.name"></h3>
                                 <p class="text-2xl font-bold text-rafa-dark-pink mb-4" x-text="selectedProduct?.price ? 'Rp ' + selectedProduct.price.toLocaleString('id-ID') : ''"></p>
-                                <div class="text-gray-600 text-sm mb-6 max-h-48 overflow-y-auto pr-2">
+                                <div class="text-gray-600 text-sm mb-6 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
                                     <p class="whitespace-pre-wrap break-words" x-text="selectedProduct?.description"></p>
                                 </div>
                             </div>

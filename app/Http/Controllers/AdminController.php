@@ -46,13 +46,13 @@ class AdminController extends Controller
         $products = $query->paginate(10)->appends($request->query());
         $kategoriList = Category::orderBy('nama')->pluck('nama');
 
-        return view('admin.katalog.index', compact('products', 'kategoriList'));
+        return view('admin.produk.index', compact('products', 'kategoriList'));
     }
 
     public function createProduct()
     {
         $categories = Category::orderBy('nama')->get();
-        return view('admin.katalog.create', compact('categories'));
+        return view('admin.produk.create', compact('categories'));
     }
 
     public function storeProduct(Request $request)
@@ -63,8 +63,6 @@ class AdminController extends Controller
             'harga' => 'required|numeric|min:0',
             'gambar' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
             'kategori' => 'required|string',
-            'is_promo' => 'nullable|boolean',
-            'diskon' => 'nullable|integer|min:0|max:100',
         ]);
 
         $gambarPath = $request->file('gambar')->store('products', 'public');
@@ -76,18 +74,16 @@ class AdminController extends Controller
             'harga' => $request->harga,
             'gambar' => $gambarPath,
             'kategori' => $request->kategori,
-            'is_promo' => $request->has('is_promo') ? true : false,
-            'diskon' => $request->diskon ?? 0,
         ]);
 
-        return redirect()->route('admin.katalog')->with('success', 'Produk berhasil ditambahkan!');
+        return redirect()->route('admin.produk')->with('success', 'Produk berhasil ditambahkan!');
     }
 
     public function editProduct($id)
     {
         $product = Product::findOrFail($id);
         $categories = Category::orderBy('nama')->get();
-        return view('admin.katalog.edit', compact('product', 'categories'));
+        return view('admin.produk.edit', compact('product', 'categories'));
     }
 
     public function updateProduct(Request $request, $id)
@@ -100,8 +96,6 @@ class AdminController extends Controller
             'harga' => 'required|numeric|min:0',
             'gambar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'kategori' => 'required|string',
-            'is_promo' => 'nullable|boolean',
-            'diskon' => 'nullable|integer|min:0|max:100',
         ]);
 
         $data = [
@@ -110,8 +104,6 @@ class AdminController extends Controller
             'deskripsi' => $request->deskripsi,
             'harga' => $request->harga,
             'kategori' => $request->kategori,
-            'is_promo' => $request->has('is_promo') ? true : false,
-            'diskon' => $request->diskon ?? 0,
         ];
 
         if ($request->hasFile('gambar')) {
@@ -124,7 +116,7 @@ class AdminController extends Controller
 
         $product->update($data);
 
-        return redirect()->route('admin.katalog')->with('success', 'Produk berhasil diperbarui!');
+        return redirect()->route('admin.produk')->with('success', 'Produk berhasil diperbarui!');
     }
 
     public function destroyProduct($id)
@@ -135,7 +127,7 @@ class AdminController extends Controller
         }
         $product->delete();
 
-        return redirect()->route('admin.katalog')->with('success', 'Produk berhasil dihapus!');
+        return redirect()->route('admin.produk')->with('success', 'Produk berhasil dihapus!');
     }
 
     public function toggleProductStatus($id)
@@ -175,29 +167,7 @@ class AdminController extends Controller
         return redirect()->route('admin.users')->with('success', 'User berhasil ditambahkan!');
     }
 
-    public function updateUser(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:6',
-        ]);
-
-        $data = [
-            'name' => $request->name,
-            'email' => $request->email,
-        ];
-
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
-        }
-
-        $user->update($data);
-
-        return redirect()->route('admin.users')->with('success', 'User berhasil diperbarui!');
-    }
 
     public function destroyUser($id)
     {
